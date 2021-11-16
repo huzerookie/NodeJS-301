@@ -5,8 +5,9 @@ mongoose.connect(mongooseURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then((connection) => {
+    console.log(mongooseURL)
     console.log("connection successful");
-    connection.disconnect()
-}).catch((e) => { console.log(e) });
+}).catch((e) => { console.log(e);
+     process.exit(-1);});
 
 

@@ -1,9 +1,8 @@
-const Restaurant = require('../model/restaurantModel')
+const Restaurant = require('../models/restaurantModel')
 
 const createRestaurant = async (req, res) => {
     if (req.body) {
         try {
-
             const restaurant = await new Restaurant(req.body).save();
             res
                 .status(201)
@@ -65,7 +64,7 @@ const deleteRestaurant = async (req, res) => {
     try {
         const deletedRestaurant = await Restaurant.findByIdAndDelete(req.params.id);
         if (!deletedRestaurant) return res.status(404).send({ error: "Restaurant not found" });
-        res.status(200).send(`Restaurant deleted:\n${deletedRestaurant}`);
+        res.status(200).send(`{restaurant:\n${deletedRestaurant}}`);
     } catch (e) {
         res.status(500).send(e);
     }

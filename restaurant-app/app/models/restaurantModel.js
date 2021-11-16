@@ -3,6 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const menuSchema = require('./menuModel')
+require('../configs/mongoose.js')
 /*By default mongoose creates a schema. We can create a custom schema,
 and can decide what to do with object just before or after getting saved*/
 const restaurantSchema = new mongoose.Schema({
