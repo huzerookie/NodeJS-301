@@ -1,10 +1,10 @@
 const express = require("express");
 require('dotenv').config()
-const restaurantRoute = require("./restaurant-app/app/router/restaurantRoute");
+const restaurantRoute = require("./restaurant-app/app/routers/restaurantRoute");
 const app = express();
 const port = process.env.PORT || 3000;
 //Connecting to DB
-require("./db/mongoose");
+require("./restaurant-app/app/configs/mongoose");
 
 //Middleware next()
 /* app.use((req, res, next) => {

@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const menuSchema = require('./menuModel')
-require('../configs/mongoose.js')
+const { menuSchema } = require('./menuModel')
+/* require('../configs/mongoose.js') */
 /*By default mongoose creates a schema. We can create a custom schema,
 and can decide what to do with object just before or after getting saved*/
 const restaurantSchema = new mongoose.Schema({
@@ -14,7 +14,6 @@ const restaurantSchema = new mongoose.Schema({
     },
     location: {
         type: String,
-        unique: true,
         trim: true
     },
     distance: [
@@ -34,12 +33,10 @@ const restaurantSchema = new mongoose.Schema({
         required: true
     }],
     budget: {
-        type: Number,
-        required: true
+        type: String,
     },
     ratings: {
         type: Number,
-        required: true,
         validate(rating) {
             if (!(rating > 0 && rating < 6)) {
                 throw new Error("Invalid Rating Entered");
@@ -81,6 +78,6 @@ const restaurantSchema = new mongoose.Schema({
     next();
 });
  */
-const Restaurant = mongoose.model("Restaurant", restaurantSchema);
+const Restaurant = mongoose.model("Restaurant", restaurantSchema, 'restaurant');
 
 module.exports = Restaurant;
