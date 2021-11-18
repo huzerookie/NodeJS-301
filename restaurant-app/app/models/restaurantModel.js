@@ -3,6 +3,8 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { menuSchema } = require('./menuModel')
+mongoose.set('debug', true);
+
 /* require('../configs/mongoose.js') */
 /*By default mongoose creates a schema. We can create a custom schema,
 and can decide what to do with object just before or after getting saved*/
@@ -48,6 +50,9 @@ const restaurantSchema = new mongoose.Schema({
 
 //To create JSON Web Token for session after login -- Multiple Tokens can be created to provide multiple login (iPad, Laptop, Mobile etc)
 //.methods because we are working on the whole user collection (instances)
+//schema.methods are used wrt the instance
+//i.e var dog = new Animal({"name":"Tommy","species":"labrador"})
+//dog.method() 
 /* userSchema.methods.generateTokenAuth = async function () {
     const user = this;
     const token = jwt.sign({ _id: user._id.toString() }, "ThisIsAGeneratedToken");
@@ -58,6 +63,8 @@ const restaurantSchema = new mongoose.Schema({
 }; */
 
 //To create a custom findBySomething() search -- For Single User (Models)
+//schema.statics is wrt the entire collection
+//i.e  Animal.staticFunction()
 /* userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) throw new Error("Unable to login");
