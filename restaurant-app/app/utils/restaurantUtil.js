@@ -6,9 +6,6 @@ const restaurantQueryBuilder = (queryParams) => {
     addParamToObj("distance.0.latitude", queryParams.latitude, restaurantObj);
     addParamToObj("menu.0.dishName", queryParams.dishName, restaurantObj);
     addParamToObj("menu.0.dishPrice", queryParams.dishPrice, restaurantObj);
-    /* if(queryParams.cuisine){
-        buildQueryForCuisine(queryParams.cuisine.split(','),restaurantObj);
-    } */
     return restaurantObj;
 }
 const addParamToObj = (paramKey, paramValue, obj) => {
