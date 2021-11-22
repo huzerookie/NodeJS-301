@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { menuSchema } = require('./menuModel')
+const { menuSchema } = require('./orderManagement.model')
 mongoose.set('debug', true);
 
 /* require('../configs/mongoose.js') */

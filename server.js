@@ -1,5 +1,7 @@
 const express = require("express");
 require('dotenv').config()
+const mongoose = require('./restaurant-app/app/configs/mongoose')
+await mongoose.connect()
 const restaurantRoute = require("./restaurant-app/app/routers/restaurantRoute");
 const app = express();
 const port = process.env.PORT || 3000;
