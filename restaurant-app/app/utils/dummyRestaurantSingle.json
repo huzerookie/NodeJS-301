@@ -1,0 +1,28 @@
+{
+    "name": "Dapur Pandan Wangi",
+    "location": "Bandung, West Java, Java",
+    "distance": [
+        {
+            "longitude": "107.62402",
+            "latitude": "-6.928453"
+        }
+    ],
+    "cuisine": [
+        "Asian",
+        "Indonesian",
+        "Vegetarian Friendly",
+        "Vegan Options",
+        "Halal"
+    ],
+    "menu": [
+        {
+            "dishName": [
+                "Buffalo Chicken Strips Sandwich"
+            ],
+            "dishPrice": [
+                11.75
+            ]
+        }
+    ],
+    "__v": 0
+}

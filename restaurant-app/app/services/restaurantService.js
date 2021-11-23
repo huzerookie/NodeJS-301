@@ -4,12 +4,17 @@ const saveRestaurant = async (body) => await new Restaurant(body).save()
 const getSingleRestaurant = async (_id) => await Restaurant.findById(_id)
 const deleteRestaurant = async (_id) => await Restaurant.findByIdAndDelete(_id)
 const getAllRestaurants = async (queryParams) => {
+    const skip = !(queryParams.skip == null) ? parseInt(queryParams.skip) : 0;
     const sortBy = !(queryParams.sortBy == null) ? queryParams.sortBy : 'name';
     const sortOrder = !(queryParams.sortOrder == null) && queryParams.sortOrder === 'desc' ? -1 : 1;
-    const limit = queryParams.limit == null ? 10 : queryParams.limit;
+    const limit = queryParams.limit == null ? 10 : parseInt(queryParams.limit);
     const restaurantObj = restaurantUtil.restaurantQueryBuilder(queryParams);
-    console.log(restaurantObj)
-    return await Restaurant.find(restaurantObj).sort({ sortBy: sortOrder }).limit(limit)
+    const restaurants = await Restaurant.find(restaurantObj).sort({ sortBy: sortOrder }).limit(limit).skip(skip)
+    const totalRestaurants = await Restaurant.find().count()
+    const data = {};
+    data.totalRestaurants = `Displaying ${restaurants.length} out of ${totalRestaurants}`
+    data.restaurants = restaurants;
+    return data;
 }
 module.exports = {
     saveRestaurant,

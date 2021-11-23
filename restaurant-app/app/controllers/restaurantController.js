@@ -3,7 +3,7 @@ const createRestaurant = async (req, res) => {
     if (req.body) {
         try {
             const restaurant = await restaurantService.saveRestaurant(req.body)
-            res.status(201).send({ message: `${req.body.name} restaurant ${restaurant.id} record saved successfully` });
+            res.status(201).send(restaurant);
         } catch (e) {
             res.status(400).send(e);
         }
@@ -13,7 +13,6 @@ const createRestaurant = async (req, res) => {
 const getAllRestaurants = async (req, res) => {
     try {
         const restaurantList = await restaurantService.getAllRestaurants(req.query);
-        if (!restaurantList) return res.status(404).send({ "error": "No restaurants found" });
         res.send(restaurantList);
     } catch (e) {
         console.log(e)
