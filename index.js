@@ -1,34 +1,22 @@
-const restaurantData = require('./restaurant-app/app/utils/restaurantApi.json')
-const menuGenerator = require('./restaurant-app/app/utils/singleMenu.js')
-const fs = require('fs')
+const express = require("express");
+require('dotenv').config()
+const mongoose = require('./restaurant-app/app/configs/mongoose')
 
-var restaurantList = [];
-/* console.log(restaurantData.results.data[0].name)
-console.log(restaurantData.results.data[0].location_string)
-console.log(restaurantData.results.data[0].latitude)
-console.log(restaurantData.results.data[0].longitude)
-console.log(restaurantData.results.data[0].cuisine.name)
-console.log(restaurantData.results.data[0].price)
-console.log(restaurantData.results.data[0].rating)
- */
+const restaurantRoute = require("./restaurant-app/app/routers/restaurantRoute");
+const app = express();
+//Connecting to DB
+mongoose.connect()
 
-let restaurantObj = {};
-restaurantData.results.data.forEach((e) => {
-    let restaurantObj = {}
-    restaurantObj.name = e.name;
-    restaurantObj.location = e.location_string;
+//Middleware next()
+/* app.use((req, res, next) => {
+    res.status(503).send("Server under maintenance");
+    // next();
+}); */
 
-    restaurantObj.distance = {};
-    restaurantObj.distance.longitude = e.longitude;
-    restaurantObj.distance.latitude = e.latitude;
+//Used to parse requests into json form -- During POST
+app.use(express.json());
 
-    restaurantObj.cuisine = e.cuisine.map(c => c.name);
-    restaurantObj.budget = e.price;
-    restaurantObj.rating = e.rating;
-    restaurantObj.menu = menuGenerator.getMenu();
+//Register User Router and Task Router
+app.use(restaurantRoute);
 
-    restaurantList.push(restaurantObj)
-})
-
-
-fs.writeFileSync("restaurantList.json", JSON.stringify(restaurantList))
+module.exports = app;

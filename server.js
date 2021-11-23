@@ -1,23 +1,10 @@
-const express = require("express");
-require('dotenv').config()
-const mongoose = require('./restaurant-app/app/configs/mongoose')
-await mongoose.connect()
-const restaurantRoute = require("./restaurant-app/app/routers/restaurantRoute");
-const app = express();
+let app = require('./index')
+var http = require("http");
+var server = http.createServer(app)
 const port = process.env.PORT || 3000;
-//Connecting to DB
-require("./restaurant-app/app/configs/mongoose");
 
-//Middleware next()
-/* app.use((req, res, next) => {
-    res.status(503).send("Server under maintenance");
-    // next();
-}); */
+module.exports = server
 
-//Used to parse requests into json form -- During POST
-app.use(express.json());
+server.listen(port, () => console.log(`Server started at port ${port}`));
 
-//Register User Router and Task Router
-app.use(restaurantRoute);
 
-app.listen(port, () => console.log(`Server started at port ${port}`));
