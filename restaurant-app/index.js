@@ -1,8 +1,8 @@
 const express = require("express");
 require('dotenv').config()
-const mongoose = require('./restaurant-app/app/configs/mongoose')
+const mongoose = require('./app/configs/mongoose')
 
-const restaurantRoute = require("./restaurant-app/app/routers/restaurantRoute");
+const restaurantRoute = require("./app/routers/restaurantRoute");
 const app = express();
 //Connecting to DB
 mongoose.connect()

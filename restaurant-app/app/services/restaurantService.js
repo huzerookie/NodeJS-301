@@ -12,7 +12,8 @@ const getAllRestaurants = async (queryParams) => {
     const restaurants = await Restaurant.find(restaurantObj).sort({ sortBy: sortOrder }).limit(limit).skip(skip)
     const totalRestaurants = await Restaurant.find().count()
     const data = {};
-    data.totalRestaurants = `Displaying ${restaurants.length} out of ${totalRestaurants}`
+    data.totalRestaurants = totalRestaurants
+    data.count = restaurants.length
     data.restaurants = restaurants;
     return data;
 }
