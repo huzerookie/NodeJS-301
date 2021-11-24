@@ -2,12 +2,8 @@ const mongoose = require('mongoose')
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { menuSchema } = require('./menuModel')
 //mongoose.set('debug', true);
 
-/* require('../configs/mongoose.js') */
-/*By default mongoose creates a schema. We can create a custom schema,
-and can decide what to do with object just before or after getting saved*/
 const customerSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -60,7 +56,6 @@ const customerSchema = new mongoose.Schema({
 customerSchema.methods.generateTokenAuth = async function () {
     const customer = this;
     const token = jwt.sign({ _id: customer._id.toString() }, "ThisIsAGeneratedToken");
-    console.log(`In generateTokenAuth():${token}`);
     customer.tokens.push({ token });
     await customer.save();
     return customer;
@@ -70,8 +65,11 @@ customerSchema.methods.generateTokenAuth = async function () {
 customerSchema.statics.findByCredentials = async (email, password) => {
     const customer = await Customer.findOne({ email });
     if (!customer) throw new Error("Unable to login");
+    console.log(customer)
     const isValid = await bcrypt.compare(password, customer.password);
+    console.log("isValid:" + isValid)
     if (!isValid) throw new Error("Unable to login");
+    console.log("comes till here findBycredentials")
     return customer;
 };
 

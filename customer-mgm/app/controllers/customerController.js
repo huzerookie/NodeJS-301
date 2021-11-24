@@ -13,14 +13,18 @@ const registerCustomer = async (req, res) => {
 }
 
 const loginCustomer = async (req, res) => {
-    if (req.body) {
-        try {
+
+    try {
+        if (req.body) {
+            console.log(req.body.email)
+            console.log(req.body.password)
             const customer = await customerService.getCredentials(req.body.email, req.body.password)
-            await customerService.generateTokenAuth(customer)
+            console.log(customer)
+            await customer.generateTokenAuth()
             res.status(200).send(customer);
-        } catch (e) {
-            res.status(400).send(e);
         }
+    } catch (e) {
+        res.status(400).send(e);
     }
 }
 const getCustomers = async (req, res) => {
@@ -76,11 +80,22 @@ const deleteCustomer = async (req, res) => {
     }
 }
 
+const logoutCustomer = async (req, res) => {
+    try {
+        req.customer.tokens = req.customer.tokens.filter(e => e.token != req.token)
+        await customerService.saveCustomer(req.customer)
+        res.status(200).send({ message: "Loggged Out Successfully!" })
+    } catch (e) {
+        res.status(404).send({ error: "Invalid Operation" })
+    }
+}
+
 module.exports = {
     registerCustomer,
     loginCustomer,
     getCustomer,
     getCustomers,
     updateCustomer,
-    deleteCustomer
+    deleteCustomer,
+    logoutCustomer
 }

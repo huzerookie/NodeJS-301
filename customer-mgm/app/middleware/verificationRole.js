@@ -1,6 +1,7 @@
 module.exports = {
-    adminVerify: async (req, res, next) => {
+    adminVerify: (req, res, next) => {
         try {
+            console.log(req.customer.role)
             if (req.customer.role === 'ADMIN') {
                 next();
             }
@@ -9,7 +10,7 @@ module.exports = {
             res.status(401).send({ error: "Operation Forbidden" })
         }
     },
-    staffVerify: async (req, res, next) => {
+    staffVerify: (req, res, next) => {
         try {
             if (req.customer.role === 'STAFF') {
                 next();
