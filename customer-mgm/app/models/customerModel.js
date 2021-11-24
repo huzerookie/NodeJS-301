@@ -38,7 +38,14 @@ const customerSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        required: true
+        uppercase: true,
+        required: true,
+        validate(value) {
+            const roles = ["ADMIN", "STAFF", "USER"]
+            if (!roles.includes(value.toUpperCase())) {
+                throw new Error("Invalid Role")
+            }
+        }
     },
     tokens: [
         {
