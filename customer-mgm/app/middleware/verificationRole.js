@@ -3,8 +3,9 @@ module.exports = {
         try {
             console.log(req.customer.role)
             if (req.customer.role === 'ADMIN') {
-                next();
+                return next();
             }
+
             throw new Error()
         } catch (e) {
             res.status(401).send({ error: "Operation Forbidden" })
@@ -13,7 +14,7 @@ module.exports = {
     staffVerify: (req, res, next) => {
         try {
             if (req.customer.role === 'STAFF') {
-                next();
+                return next();
             }
             throw new Error()
         } catch (e) {

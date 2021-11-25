@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
-const mongooseURL = /* process.env.MONGODB_URI || */ 'mongodb://127.0.0.1:27017/customer-db';
+const mongooseURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/customer-db';
 const connect = () => {
     if (process.env.NODE_ENV === 'test') {
         const Mockgoose = require('mockgoose').Mockgoose;
