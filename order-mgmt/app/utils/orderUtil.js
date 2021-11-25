@@ -11,5 +11,5 @@ module.exports = {
         }
         return dishes
     },
-    fetchPrice: (dishes) => dishes.map(e => e.dishPrice).reduce((acc, sum) => acc + sum),
+    fetchPrice: (dishes) => dishes.map(e => e.dishPrice * e.qty).reduce((acc, sum) => acc + sum),
 }

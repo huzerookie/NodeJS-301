@@ -12,9 +12,10 @@ const createRestaurant = async (req, res) => {
 
 const getAllRestaurants = async (req, res) => {
     try {
-        console.log(req.url)
         const restaurantList = await restaurantService.getAllRestaurants(req.query);
-        res.send(restaurantList);
+        res.status(200).json({
+            data: JSON.parse(JSON.stringify(restaurantList))
+        });
     } catch (e) {
         console.log(e)
         res.status(500).send(e);

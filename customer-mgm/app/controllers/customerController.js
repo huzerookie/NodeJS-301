@@ -100,8 +100,9 @@ const logoutAllCustomers = async (req, res) => {
     }
 }
 
-const fetchAuthenticationStatus = (req, res) => {
-    return req.customer
+const isAuthenticated = (req, res) => {
+    console.log(req.customer)
+    return res.status(200).send(req.customer)
 }
 
 module.exports = {
@@ -113,5 +114,5 @@ module.exports = {
     deleteCustomer,
     logoutCustomer,
     logoutAllCustomers,
-    fetchAuthenticationStatus
+    isAuthenticated
 }
