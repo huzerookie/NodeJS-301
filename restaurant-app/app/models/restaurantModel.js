@@ -3,7 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { menuSchema } = require('./menuModel')
-//mongoose.set('debug', true);
+mongoose.set('debug', true);
 
 /* require('../configs/mongoose.js') */
 /*By default mongoose creates a schema. We can create a custom schema,

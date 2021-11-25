@@ -1,10 +1,16 @@
-const customerService = require('../services/customerService')
+const orderService = require('../services/orderService')
+require('dotenv').config()
 
-const registerCustomer = async (req, res) => {
-    if (req.body) {
+//re.body contains name of restaurant and array of dishNames
+const placeOrder = async (req, res) => {
+    if (req.body.restaurant && (Array.isArray(req.body.dishes) && req.body.dishes.length > 0)) {
         try {
-            const customer = await customerService.saveCustomer(req.body)
-            await customer.generateTokenAuth()
+            const restaurant = await axios.get(encodeURI(process.env.RESTAURANT_APP + "name=" + restaurant + "&dishName=" + dishes))
+            if (!restaurant) res.status(404).send({ error: "Invalid Request" })
+            const restaurantDishes = restaurant.menu.map(e => e.dishName)
+            const isDishesPresent = dishes.split(',').every(dish => restaurantDishes.includes(dish));
+            if (!isDishesPresent) res.status(404).send(error: "Invalid Request")
+
             res.status(201).send(customer);
         } catch (e) {
             res.status(400).send(e);
@@ -84,17 +90,7 @@ const logoutCustomer = async (req, res) => {
     try {
         req.customer.tokens = req.customer.tokens.filter(e => e.token != req.token)
         await customerService.saveCustomer(req.customer)
-        res.status(200).send({ message: "Logged Out Successfully!" })
-    } catch (e) {
-        res.status(404).send({ error: "Invalid Operation" })
-    }
-}
-
-const logoutAllCustomers = async (req, res) => {
-    try {
-        req.customer.tokens = []
-        await customerService.saveCustomer(req.customer)
-        res.status(200).send({ message: "Logged Out Every User Successfully!" })
+        res.status(200).send({ message: "Loggged Out Successfully!" })
     } catch (e) {
         res.status(404).send({ error: "Invalid Operation" })
     }
@@ -107,6 +103,5 @@ module.exports = {
     getCustomers,
     updateCustomer,
     deleteCustomer,
-    logoutCustomer,
-    logoutAllCustomers
+    logoutCustomer
 }

@@ -12,4 +12,5 @@ router.get("/customer/", [auth, adminVerify], customerController.getCustomers);
 router.patch("/customer/:id", [auth, staffVerify], customerController.updateCustomer);
 router.delete("/customer/:id", [auth, staffVerify], customerController.deleteCustomer);
 router.post("/customer/logout", [auth], customerController.logoutCustomer)
+router.post("/customer/logoutAll", [auth], customerController.logoutAllCustomers)
 module.exports = router;
