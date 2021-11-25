@@ -1,7 +1,4 @@
 const mongoose = require('mongoose')
-const validator = require("validator");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 //mongoose.set('debug', true);
 
 const orderSchema = new mongoose.Schema({
@@ -10,17 +7,17 @@ const orderSchema = new mongoose.Schema({
         required: true,
         ref: "Restaurant"
     },
-    location: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    dish:
+    dishes:
         [{
-            order: {
-                type: moongoose.Schema.Types.ObjectId,
+            dishName: {
+                type: String,
                 required: true,
-                ref: "Menu"
+                trim: true
+            },
+            dishPrice: {
+                type: Number,
+                required: true,
+                trim: true
             },
             qty: {
                 type: Number,
@@ -41,34 +38,7 @@ const orderSchema = new mongoose.Schema({
     timestamps: true
 });
 
-customerSchema.methods.generateTokenAuth = async function () {
-    const customer = this;
-    const token = jwt.sign({ _id: customer._id.toString() }, "ThisIsAGeneratedToken");
-    customer.tokens.push({ token });
-    await customer.save();
-    return customer;
-};
 
+const Order = mongoose.model("Order", orderSchema, 'order');
 
-customerSchema.statics.findByCredentials = async (email, password) => {
-    const customer = await Customer.findOne({ email });
-    if (!customer) throw new Error("Unable to login");
-    console.log(customer)
-    const isValid = await bcrypt.compare(password, customer.password);
-    console.log("isValid:" + isValid)
-    if (!isValid) throw new Error("Unable to login");
-    console.log("comes till here findBycredentials")
-    return customer;
-};
-
-customerSchema.pre("save", async function (next) {
-    const customer = this;
-    if (customer.isModified("password")) {
-        customer.password = await bcrypt.hash(customer.password, 8);
-    }
-    next();
-});
-
-const Customer = mongoose.model("Customer", customerSchema, 'customer');
-
-module.exports = Customer;
+module.exports = Order;

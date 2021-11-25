@@ -1,9 +1,11 @@
 const express = require("express");
 require('dotenv').config()
+var cors = require('cors')
 const mongoose = require('./app/configs/mongoose')
 
-const customerRoute = require("./app/routers/orderRouter");
+const orderRoute = require("./app/routers/orderRouter");
 const app = express();
+
 //Connecting to DB
 mongoose.connect()
 
@@ -11,6 +13,9 @@ mongoose.connect()
 app.use(express.json());
 
 //Register User Router and Task Router
-app.use(customerRoute);
+app.use(orderRoute);
+
+//Register CORS
+app.use(cors())
 
 module.exports = app;

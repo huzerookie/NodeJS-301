@@ -1,7 +1,7 @@
 let app = require('./index')
 var http = require("http");
 var server = http.createServer(app)
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5000;
 
 module.exports = server
 

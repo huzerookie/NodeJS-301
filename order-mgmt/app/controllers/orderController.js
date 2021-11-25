@@ -1,107 +1,48 @@
-const orderService = require('../services/orderService')
 require('dotenv').config()
+const fetchPrice = require('../utils/orderUtil').fetchPrice
+const fetchDishes = require('../utils/orderUtil').fetchDishes
+const orderService = require('../services/orderService')
+const axios = require('axios')
 
-//re.body contains name of restaurant and array of dishNames
 const placeOrder = async (req, res) => {
     if (req.body.restaurant && (Array.isArray(req.body.dishes) && req.body.dishes.length > 0)) {
         try {
-            const restaurant = await axios.get(encodeURI(process.env.RESTAURANT_APP + "name=" + restaurant + "&dishName=" + dishes))
-            if (!restaurant) res.status(404).send({ error: "Invalid Request" })
-            const restaurantDishes = restaurant.menu.map(e => e.dishName)
-            const isDishesPresent = dishes.split(',').every(dish => restaurantDishes.includes(dish));
-            if (!isDishesPresent) res.status(404).send(error: "Invalid Request")
-
-            res.status(201).send(customer);
+            const orderedDishes = req.body.dishes.map(e => e.dishName).join(',')
+            const body = await axios.create({
+                baseURL: 'http://localhost:3000'
+            }).get('/restaurants', {
+                params: {
+                    name: req.body.restaurant,
+                    dishName: orderedDishes
+                }
+            })
+            const restaurant = body.data.restaurants[0]
+            const dishes = fetchDishes(restaurant, orderedDishes, req.body.dishes)
+            const price = fetchPrice(dishes)
+            const orderObj = {}
+            orderObj.restaurant = restaurant._id
+            orderObj.price = price
+            orderObj.dishes = dishes
+            const order = await orderService.saveOrder(orderObj)
+            res.status(201).send(order)
         } catch (e) {
             res.status(400).send(e);
         }
     }
 }
 
-const loginCustomer = async (req, res) => {
-
+const getOrder = async (req, res) => {
     try {
-        if (req.body) {
-            console.log(req.body.email)
-            console.log(req.body.password)
-            const customer = await customerService.getCredentials(req.body.email, req.body.password)
-            console.log(customer)
-            await customer.generateTokenAuth()
-            res.status(200).send(customer);
-        }
-    } catch (e) {
-        res.status(400).send(e);
-    }
-}
-const getCustomers = async (req, res) => {
-    try {
-        const customerList = await customerService.getAllCustomers();
-        res.status(200).send(customerList);
+        const order = await orderService.getOrder(req.params.id)
+        if (!order) return res.status(404).send({ error: "Order Unavailable" })
+        res.status(200).send(order)
     } catch (e) {
         console.log(e)
-        res.status(500).send(e);
-    }
-}
-
-const getCustomer = async (req, res) => {
-    const _id = req.params.id;
-    try {
-        const customer = await customerService.getCustomer(_id);
-        if (!customer) return res.status(404).send({ "error": `Customer with id ${_id} not available` });
-        res.send(customer);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-}
-
-const updateCustomer = async (req, res) => {
-    const reqCustomerBody = Object.keys(req.body);
-    const customCustomerKeys = ["name", "password"];
-    let isAllowedUpdate = reqCustomerBody.every((customerKey) =>
-        customCustomerKeys.includes(customerKey)
-    );
-    if (!isAllowedUpdate)
-        return res
-            .status(400)
-            .send({ error: "Invalid Request! Please update valid parameters." });
-    try {
-        const customerToUpdate = await customerService.getCustomer(req.params.id);
-        if (!customerToUpdate)
-            return res.status(404).send({ error: "Invalid ID! Customer not found" });
-        reqCustomerBody.forEach((key) => (customerToUpdate[key] = req.body[key]));
-        await customerService.saveCustomer(customerToUpdate);
-        res.status(201).send(customerToUpdate);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-}
-
-const deleteCustomer = async (req, res) => {
-    try {
-        const deletedCustomer = await customerService.deleteCustomer(req.params.id);
-        if (!deletedCustomer) return res.status(404).send({ error: "Customer not found" });
-        res.status(200).send(deletedCustomer);
-    } catch (e) {
-        res.status(500).send(e);
-    }
-}
-
-const logoutCustomer = async (req, res) => {
-    try {
-        req.customer.tokens = req.customer.tokens.filter(e => e.token != req.token)
-        await customerService.saveCustomer(req.customer)
-        res.status(200).send({ message: "Loggged Out Successfully!" })
-    } catch (e) {
-        res.status(404).send({ error: "Invalid Operation" })
+        res.status(500).send({ error: "Internal Server Error" })
     }
 }
 
 module.exports = {
-    registerCustomer,
-    loginCustomer,
-    getCustomer,
-    getCustomers,
-    updateCustomer,
-    deleteCustomer,
-    logoutCustomer
+    placeOrder,
+    getOrder
 }

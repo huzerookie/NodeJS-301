@@ -100,6 +100,10 @@ const logoutAllCustomers = async (req, res) => {
     }
 }
 
+const fetchAuthenticationStatus = (req, res) => {
+    return req.customer
+}
+
 module.exports = {
     registerCustomer,
     loginCustomer,
@@ -108,5 +112,6 @@ module.exports = {
     updateCustomer,
     deleteCustomer,
     logoutCustomer,
-    logoutAllCustomers
+    logoutAllCustomers,
+    fetchAuthenticationStatus
 }
